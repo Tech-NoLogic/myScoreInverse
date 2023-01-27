@@ -19,7 +19,8 @@ def plot(imgs, with_orig=False, row_title=None, **imshow_kwargs):
 
             # modified to show img
             arr = np.asarray(img)
-            arr = np.squeeze(arr, (0, 1))
+            if img.shape[1] == 1:
+                arr = np.squeeze(arr, (0, 1))
 
             ax.imshow(arr, **imshow_kwargs)
             ax.set(xticklabels=[], yticklabels=[], xticks=[], yticks=[])
