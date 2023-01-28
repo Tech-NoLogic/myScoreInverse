@@ -17,12 +17,12 @@ def plot(imgs, with_orig=False, row_title=None, **imshow_kwargs):
         for col_idx, img in enumerate(row):
             ax = axs[row_idx, col_idx]
 
-            # modified to show img
-            arr = np.asarray(img)
-            if img.shape[1] == 1:
-                arr = np.squeeze(arr, (0, 1))
+            # # modified to show img
+            # arr = np.asarray(img)
+            # if img.shape[1] == 1:
+            #     arr = np.squeeze(arr, (0, 1))
 
-            ax.imshow(arr, **imshow_kwargs)
+            ax.imshow(np.asarry(img), **imshow_kwargs)
             ax.set(xticklabels=[], yticklabels=[], xticks=[], yticks=[])
 
     if with_orig:
