@@ -22,7 +22,7 @@ def plot(imgs, with_orig=False, row_title=None, **imshow_kwargs):
             # if img.shape[1] == 1:
             #     arr = np.squeeze(arr, (0, 1))
 
-            ax.imshow(np.asarry(img), **imshow_kwargs)
+            ax.imshow(np.asarray(img), **imshow_kwargs)
             ax.set(xticklabels=[], yticklabels=[], xticks=[], yticks=[])
 
     if with_orig:
