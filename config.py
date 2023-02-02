@@ -21,7 +21,7 @@ class Config(object):
     img_size=28
 
     batch_size=64
-    epochs=5
+    epochs=1
     lr=1e-3
 
     beta_start=0.0001
@@ -29,5 +29,7 @@ class Config(object):
 
     timesteps=200
     time_dim = 4 * img_size
+    
+    model_path = 'model.pth'
 # config = Config()
 # print(config.__dict__)

@@ -33,3 +33,13 @@ def plot(imgs, with_orig=False, row_title=None, **imshow_kwargs):
             axs[row_idx, 0].set(ylabel=row_title[row_idx])
 
     plt.tight_layout()
+    
+
+def extract(vec, t, x_shape):
+    batch_size = t.shape[0] 
+    # t: [b,]
+    out = vec.gather(-1, t.cpu()) 
+    # vec: [timesteps,] -> out: [b,] (use t as the index)
+    
+    return out.reshape(batch_size, *((1,) * (len(x_shape) - 1))).to(t.device)
+    # out: [b,] -> [b, *((1,)*(4-1))] -> [b, *(1, 1, 1)] -> [b, 1, 1, 1] -> [b, 1, 1, 1].to(cuda)
