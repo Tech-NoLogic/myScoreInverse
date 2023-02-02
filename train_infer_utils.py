@@ -15,20 +15,29 @@ def get_noisy_image(x_start, step, noise=None):
 
     return sqrt_alphas_cumprod_t * x_start + sqrt_one_minus_alphas_cumprod_t * noise
 
+@torch.no_grad()
 def get_denoised_image(x, step, model):
+    # x: [b, c, h, w], step: [b,]
     betas_t = utils.extract(Consts.betas, step, x.shape)
+    # betas_t: [b, 1, 1, 1]
     sqrt_one_minus_alphas_cumprod_t = utils.extract(Consts.sqrt_one_minus_alphas_cumprod, step, x.shape)
+    # sqrt_one_minus_alphas_cumprod_t: [b, 1, 1, 1]
     sqrt_recip_alphas_t = utils.extract(Consts.sqrt_recip_alphas, step, x.shape)
 
     model_mean = sqrt_recip_alphas_t * (x - betas_t  * model(x, step) / sqrt_one_minus_alphas_cumprod_t)
+    # [b, 1, 1, 1] * ([b, c, h, w] - [b, 1, 1, 1] * [b, c, h, w] / [b, 1, 1, 1]) -> [b, c, h, w]
 
     if step[0] == 0:
         return model_mean
     else:
         noise = torch.randn_like(x)
+        # noise: [b, c, h, w]
         posterior_variance_t = utils.extract(Consts.posterior_variance, step, x.shape)
-        return model_mean + noise * Consts.posterior_variance
+        # posterior_variance_t: [b, 1, 1, 1]
+        return model_mean + noise * posterior_variance_t
+        # [b, c, h, w] + [b, c, h, w] * [b, 1, 1, 1] -> [b, c, h, w]
     
+@torch.no_grad()
 def get_denoised_images(shape, timesteps, model):
     device = next(model.parameters()).device
     b_size = shape[0]
@@ -38,9 +47,10 @@ def get_denoised_images(shape, timesteps, model):
 
     for i in tqdm(reversed(range(0, timesteps)), desc='sampling loop time step', total=timesteps):
         img = get_denoised_image(img, torch.full((b_size,), i, device=device, dtype=torch.long), model)
-        imgs.append(img.cpu().numpy())
+        imgs.append(img)
     return imgs
 
+@torch.no_grad()
 def sample(model, img_size, batch_size=16, channels=3):
     return get_denoised_images((batch_size, channels, img_size, img_size), Config.timesteps, model)
 
