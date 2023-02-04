@@ -14,6 +14,7 @@ def get_noisy_image(x_start, step, noise=None):
     sqrt_one_minus_alphas_cumprod_t = utils.extract(Consts.sqrt_one_minus_alphas_cumprod, step, x_start.shape)
 
     return sqrt_alphas_cumprod_t * x_start + sqrt_one_minus_alphas_cumprod_t * noise
+    # [b,1,1,1] * [b,c,h,w] + [b,c,1,1] * [b,c,h,w]
 
 @torch.no_grad()
 def get_denoised_image(x, step, model):

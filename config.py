@@ -20,8 +20,8 @@ class Config(object):
     channels=1
     img_size=28
 
-    batch_size=64
-    epochs=1
+    batch_size=128
+    epochs=5
     lr=1e-3
 
     beta_start=0.0001
