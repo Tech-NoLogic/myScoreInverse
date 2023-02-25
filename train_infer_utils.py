@@ -6,6 +6,7 @@ import utils
 from consts import Consts
 from config import Config
 
+@torch.no_grad()
 def get_noisy_image(x_start, step, noise=None):
     if noise == None:
         noise = torch.randn_like(x_start)

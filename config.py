@@ -21,13 +21,13 @@ class Config(object):
     img_size=28
 
     batch_size=64
-    epochs=5
-    lr=1e-3
+    epochs=2
+    lr=2e-4
 
     beta_start=0.0001
     beta_end=0.02
 
-    timesteps=200
+    timesteps=1000
     time_dim = 4 * img_size
     
     model_path = 'model.pth'

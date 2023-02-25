@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import torch.nn as nn
 
 image = None
 
@@ -43,3 +44,13 @@ def extract(vec, t, x_shape):
     
     return out.reshape(batch_size, *((1,) * (len(x_shape) - 1))).to(t.device)
     # out: [b,] -> [b, *((1,)*(4-1))] -> [b, *(1, 1, 1)] -> [b, 1, 1, 1] -> [b, 1, 1, 1].to(cuda)
+    
+def weight_init(m):
+    if isinstance(m, nn.Linear):
+        nn.init.xavier_normal_(m.weight)
+        nn.init.constant_(m.bias, 0)
+    elif isinstance(m, nn.Conv2d):
+        nn.init.kaiming_normal_(m.weight)
+    elif isinstance(m, nn.BatchNorm2d):
+        nn.init.constant_(m.weight, 1)
+        nn.init.constant_(m.bias, 0)
